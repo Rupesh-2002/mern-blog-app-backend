@@ -12,6 +12,7 @@ const cors = require('cors')
 
 dotenv.config()
 const uri = process.env.DB_URI
+
 connectDB(uri)
 
 const app = express()

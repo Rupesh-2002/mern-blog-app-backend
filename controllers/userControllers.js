@@ -114,7 +114,7 @@ const updateProfilePicture = async (req, res, next) => {
           if(filename){
             fileRemover(filename)
           }
-          user.avatar = req.file.filename
+          user.avatar = req.file.path
           await user.save()
           const updatedUser = user
 

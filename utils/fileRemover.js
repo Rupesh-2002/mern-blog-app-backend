@@ -1,17 +1,8 @@
-const fs = require('fs')
-const path = require('path')
+
+const cloudinary = require('cloudinary').v2;
 const fileRemover = (filename)=>{
-    fs.unlink(path.join(__dirname, '../uploads', filename), function(err){
-        if(err && err.code === "ENOENT"){
-
-        }
-        else if(err){
-
-        }
-        else{
-
-        }
-    })
+    const publicId = filename.split('/').pop().split('.')[0]; // Extract the public ID from the filename
+    cloudinary.uploader.destroy(publicId);
 }
 
 module.exports = {fileRemover}

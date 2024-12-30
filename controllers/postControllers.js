@@ -84,12 +84,11 @@ const updatePost = async (req, res, next) => {
         next(error);
       } else {
         if (req.file) {
-          let filename = null;
-          filename = post.photo;
-          if (filename) {
-            fileRemover(filename);
+          const previousFilename = post.photo;
+          if (previousFilename) {
+            fileRemover(previousFilename)
           }
-          post.photo = req.file.filename;
+          post.photo = req.file.path;  // This will hold the URL of the uploaded image on Cloudinary
         }
         handleUpdatePostData(req.body.document);
       }

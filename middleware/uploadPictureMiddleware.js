@@ -1,25 +1,30 @@
-const path = require('path')
-const multer = require('multer')
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const {CloudinaryStorage} = require('multer-storage-cloudinary');
+const dotenv = require('dotenv')
+dotenv.config()
 
-const storage = multer.diskStorage({
-    destination : function(req, file, cb){
-        cb(null, path.join(__dirname, '../uploads'))
-    },
-    filename : function(req, file, cb){
-        cb(null, `${Date.now()}-${file.originalname}`)
-    }
-})
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,     
+  api_key: process.env.CLOUDINARY_API_KEY,         
+  api_secret:process.env.CLOUDINARY_API_SECRET     
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: 'images', 
+  allowedFormats: ['jpg', 'jpeg', 'png'],
+});
+
 const uploadPicture = multer({
-    storage : storage,
-    fileFilter : function(req, file, cb){
-        let ext = path.extname(file.originalname)
-        if(ext !== '.png' && ext !== '.jpeg' && ext !== '.jpg'){
-            return cb(new Error("Only images are allowed"))
-        }
-        else{
-           return cb(null, true)
-        }
-    }
-})
+  storage: storage,
+//   fileFilter: function(req, file, cb) {
+//     const ext = file.mimetype.split('/')[1];
+//     // if (ext !== 'png' && ext !== 'jpeg' && ext !== 'jpg') {
+//     //   return cb(new Error('Only images are allowed'));
+//     // }
+//     return cb(null, true);
+//   }
+});
 
-module.exports = {uploadPicture}
+module.exports = { uploadPicture };
