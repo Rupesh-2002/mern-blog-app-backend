@@ -38,7 +38,7 @@ const createPost = async (req, res, next) => {
         next(error);
       } else {
         if (req.file) {
-        handleCreatePostData(req.body.document, req.file.filename);
+        handleCreatePostData(req.body.document, req.file.path);
           
         }
         else{
@@ -105,7 +105,10 @@ const deletePost = async (req, res, next) => {
       let error = new Error("Post not found");
       next(error);
     }
-
+    const fileName = post.photo
+    if(fileName){
+      fileRemover(fileName)
+    }
     await Comment.deleteMany({ post: post._id });
     res.status(201).json({
       message: "Post deleted successfully",
